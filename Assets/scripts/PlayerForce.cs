@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerForce : MonoBehaviour
 {
 
-    Rigidbody2D smallgun, maingun, tankhead;
+    Rigidbody2D tankbase, maingun, moversquare;
     [SerializeField]
     [Range(1, 100f)]
     float speed = 10;
@@ -22,18 +24,16 @@ public class PlayerForce : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Head = GameObject.Find("Head").GetComponent<Rigidbody2D>();
-        //smallgun = GameObject.Find("smallgun").GetComponent<Rigidbody2D>();
-        //tankhead = GameObject.Find("tankbase").GetComponent<Rigidbody2D>();
-
+        tankbase = GameObject.Find("tankbase").GetComponent<Rigidbody2D>();
         maingun = GameObject.Find("maingun").GetComponent<Rigidbody2D>();
-        //Hand = GameObject.Find("Hand").GetComponent<Rigidbody2D>();
+        moversquare = GameObject.Find("moversquare").GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         playerControls();
+
     }
 
     private void playerControls()
@@ -43,7 +43,6 @@ public class PlayerForce : MonoBehaviour
         {
             maingun.AddRelativeForce(Vector2.right * speed * modifier * Time.deltaTime);
         }
-
         if (Input.GetKeyDown(KeyCode.A))
         {
             maingun.AddRelativeForce(Vector2.left * speed * modifier * Time.deltaTime);
@@ -51,11 +50,21 @@ public class PlayerForce : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
+            moversquare.AddRelativeForce(Vector2.right * speed * modifier * Time.deltaTime);
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            moversquare.AddRelativeForce(Vector2.left * speed * modifier * Time.deltaTime);
+        }
+
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
             shoot(rbullet);
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.R))
         {
-            shoot(abullet);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
@@ -71,5 +80,13 @@ public class PlayerForce : MonoBehaviour
     IEnumerator shootTimer() {
         yield return new WaitForSeconds(1f);
         canShoot = true;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("boundary"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
     }
 }

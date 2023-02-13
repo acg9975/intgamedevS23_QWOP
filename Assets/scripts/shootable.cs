@@ -15,4 +15,11 @@ public class shootable : MonoBehaviour
     {
         
     }
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("boundary"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }

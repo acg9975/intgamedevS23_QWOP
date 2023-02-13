@@ -12,7 +12,7 @@ public class bulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.transform.Translate(Vector3.up * Time.deltaTime * 3);
+        transform.transform.Translate(Vector3.up * Time.deltaTime * 4);
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
